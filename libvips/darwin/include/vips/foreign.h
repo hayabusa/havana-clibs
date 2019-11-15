@@ -342,6 +342,7 @@ typedef struct _VipsForeignSaveClass {
 GType vips_foreign_save_get_type(void);
 
 const char *vips_foreign_find_save( const char *filename );
+gchar **vips_foreign_get_suffixes( void );
 const char *vips_foreign_find_save_buffer( const char *suffix );
 
 int vips_vipsload( const char *filename, VipsImage **out, ... )
@@ -405,12 +406,18 @@ int vips_webpsave_mime( VipsImage *in, ... )
  * @VIPS_FOREIGN_TIFF_COMPRESSION_PACKBITS: packbits compression
  * @VIPS_FOREIGN_TIFF_COMPRESSION_CCITTFAX4: fax4 compression
  * @VIPS_FOREIGN_TIFF_COMPRESSION_LZW: LZW compression
+ * @VIPS_FOREIGN_TIFF_COMPRESSION_WEBP: WEBP compression
+ * @VIPS_FOREIGN_TIFF_COMPRESSION_ZSTD: ZSTD compression
  *
  * The compression types supported by the tiff writer.
  *
  * Use @Q to set the jpeg compression level, default 75.
  *
  * Use @prediction to set the lzw or deflate prediction, default none.
+ *
+ * Use @lossless to set WEBP lossless compression.
+ *
+ * Use @level to set webp and zstd compression level.
  */
 typedef enum {
 	VIPS_FOREIGN_TIFF_COMPRESSION_NONE,
@@ -419,6 +426,8 @@ typedef enum {
 	VIPS_FOREIGN_TIFF_COMPRESSION_PACKBITS,
 	VIPS_FOREIGN_TIFF_COMPRESSION_CCITTFAX4,
 	VIPS_FOREIGN_TIFF_COMPRESSION_LZW,
+	VIPS_FOREIGN_TIFF_COMPRESSION_WEBP,
+	VIPS_FOREIGN_TIFF_COMPRESSION_ZSTD,
 	VIPS_FOREIGN_TIFF_COMPRESSION_LAST
 } VipsForeignTiffCompression;
 
@@ -560,6 +569,15 @@ int vips_gifload( const char *filename, VipsImage **out, ... )
 int vips_gifload_buffer( void *buf, size_t len, VipsImage **out, ... )
 	__attribute__((sentinel));
 
+int vips_heifload( const char *filename, VipsImage **out, ... )
+	__attribute__((sentinel));
+int vips_heifload_buffer( void *buf, size_t len, VipsImage **out, ... )
+	__attribute__((sentinel));
+int vips_heifsave( VipsImage *in, const char *filename, ... )
+	__attribute__((sentinel));
+int vips_heifsave_buffer( VipsImage *in, void **buf, size_t *len, ... )
+	__attribute__((sentinel));
+
 int vips_niftiload( const char *filename, VipsImage **out, ... )
 	__attribute__((sentinel));
 int vips_niftisave( VipsImage *in, const char *filename, ... )
@@ -570,6 +588,7 @@ int vips_niftisave( VipsImage *in, const char *filename, ... )
  * @VIPS_FOREIGN_DZ_LAYOUT_DZ: use DeepZoom directory layout
  * @VIPS_FOREIGN_DZ_LAYOUT_ZOOMIFY: use Zoomify directory layout
  * @VIPS_FOREIGN_DZ_LAYOUT_GOOGLE: use Google maps directory layout
+ * @VIPS_FOREIGN_DZ_LAYOUT_IIIF: use IIIF directory layout
  *
  * What directory layout and metadata standard to use. 
  */
@@ -577,6 +596,7 @@ typedef enum {
 	VIPS_FOREIGN_DZ_LAYOUT_DZ,
 	VIPS_FOREIGN_DZ_LAYOUT_ZOOMIFY,
 	VIPS_FOREIGN_DZ_LAYOUT_GOOGLE,
+	VIPS_FOREIGN_DZ_LAYOUT_IIIF,
 	VIPS_FOREIGN_DZ_LAYOUT_LAST
 } VipsForeignDzLayout;
 
@@ -599,17 +619,38 @@ typedef enum {
  * VipsForeignDzContainer:
  * @VIPS_FOREIGN_DZ_CONTAINER_FS: write tiles to the filesystem
  * @VIPS_FOREIGN_DZ_CONTAINER_ZIP: write tiles to a zip file
+ * @VIPS_FOREIGN_DZ_CONTAINER_SZI: write to a szi file
  *
  * How many pyramid layers to create.
  */
 typedef enum {
 	VIPS_FOREIGN_DZ_CONTAINER_FS,
 	VIPS_FOREIGN_DZ_CONTAINER_ZIP,
+	VIPS_FOREIGN_DZ_CONTAINER_SZI,
 	VIPS_FOREIGN_DZ_CONTAINER_LAST
 } VipsForeignDzContainer;
 
 int vips_dzsave( VipsImage *in, const char *name, ... )
 	__attribute__((sentinel));
+
+/**
+ * VipsForeignHeifCompression:
+ * @VIPS_FOREIGN_HEIF_COMPRESSION_HEVC: x265
+ * @VIPS_FOREIGN_HEIF_COMPRESSION_AVC: x264
+ * @VIPS_FOREIGN_HEIF_COMPRESSION_JPEG: jpeg
+ * @VIPS_FOREIGN_HEIF_COMPRESSION_AV1: aom
+ *
+ * The compression format to use inside a HEIF container. 
+ *
+ * This is assumed to use the same numbering as %heif_compression_format.
+ */
+typedef enum {
+	VIPS_FOREIGN_HEIF_COMPRESSION_HEVC = 1,
+	VIPS_FOREIGN_HEIF_COMPRESSION_AVC = 2,
+	VIPS_FOREIGN_HEIF_COMPRESSION_JPEG = 3,
+	VIPS_FOREIGN_HEIF_COMPRESSION_AV1 = 4,
+	VIPS_FOREIGN_HEIF_COMPRESSION_LAST
+} VipsForeignHeifCompression;
 
 #ifdef __cplusplus
 }
