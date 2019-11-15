@@ -4,17 +4,17 @@
 #ifndef VIPS_VERSION_H
 #define VIPS_VERSION_H
 
-#define VIPS_VERSION		"8.7.3"
-#define VIPS_VERSION_STRING	"8.7.3-Fri Jan  4 09:19:21 UTC 2019"
+#define VIPS_VERSION		"8.9.0"
+#define VIPS_VERSION_STRING	"8.9.0-Fri Nov 15 06:01:35 UTC 2019"
 #define VIPS_MAJOR_VERSION	(8)
-#define VIPS_MINOR_VERSION	(7)
-#define VIPS_MICRO_VERSION	(3)
+#define VIPS_MINOR_VERSION	(9)
+#define VIPS_MICRO_VERSION	(0)
 
 /* The ABI version, as used for library versioning.
  */
-#define VIPS_LIBRARY_CURRENT	(51)
-#define VIPS_LIBRARY_REVISION	(4)
-#define VIPS_LIBRARY_AGE	(9)
+#define VIPS_LIBRARY_CURRENT	(54)
+#define VIPS_LIBRARY_REVISION	(0)
+#define VIPS_LIBRARY_AGE	(12)
 
 /** 
  * VIPS_SONAME:
